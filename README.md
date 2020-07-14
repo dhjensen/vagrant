@@ -2,7 +2,7 @@
 
 ## mint
 
-Going to test linux mint playbook in vagrant.
+Ansible linux mint playbook test.
 
 Boxes:
 

@@ -1,12 +1,34 @@
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.box = "epipho/mint-20.0"
-  config.vm.box_version = "1.0.0"
+
+  config.vm.define "mint193", autostart: false do |mint193|
+    mint193.vm.box = "epipho/mint-19.3"
+    mint193.vm.box_version = "1.0.0"
+  end
+
+  config.vm.define "mint200" do |mint200|
+    mint200.vm.box = "epipho/mint-20.0"
+    mint200.vm.box_version = "1.0.0"
+  end
 
   config.vm.provision "ansible_local" do |ansible|
-    ansible.playbook = "playbook.yml"
+  #config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "play/linux_mint.yaml"
     # For focal the ppa doesnt have an ansible build yet so it fails.
-    ansible.install_mode = :pip
+    #ansible.install_mode = :pip
+
+    # ansible.start_at_task = "remove_obsolete_extensions"
+
+    # ansible.verbose = "-vvvv"
+
+    ansible.tags = ["untagged", "assert", "base", "user", "os"]
+
+    ansible.skip_tags = ["packages", "keys", "downloads", "repositories"]
+
+    # ansible.host_vars = {
+    #   "default" => {"ansible_ssh_user" => "vagrant"}
+    # }
+
   end
 end

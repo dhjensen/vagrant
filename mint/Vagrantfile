@@ -1,0 +1,11 @@
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = "epipho/mint-20.0"
+
+  config.vm.provision "ansible_local" do |ansible|
+    ansible.playbook = "playbook.yml"
+    # For focal the ppa doesnt have an ansible build yet so it fails.
+    ansible.install_mode = :pip
+  end
+end

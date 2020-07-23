@@ -16,15 +16,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #config.vm.provision "ansible" do |ansible|
     ansible.playbook = "play/linux_mint.yaml"
     # For focal the ppa doesnt have an ansible build yet so it fails.
-    #ansible.install_mode = :pip
+    ansible.install_mode = :pip
 
     # ansible.start_at_task = "remove_obsolete_extensions"
 
     # ansible.verbose = "-vvvv"
 
-    ansible.tags = ["untagged", "assert", "base", "user", "os"]
+    # ansible.tags = ["untagged", "assert", "base", "user", "os"]
 
-    ansible.skip_tags = ["packages", "keys", "downloads", "repositories"]
+    # ansible.skip_tags = ["packages", "keys", "downloads", "repositories"]
 
     # ansible.host_vars = {
     #   "default" => {"ansible_ssh_user" => "vagrant"}

@@ -22,6 +22,7 @@
   become: true
   gather_facts: no
   pre_tasks:
+  # To support ansible_connection type "local", use fact for become_user
   - name: set_fact_active_user
     set_fact:
       active_user: "{{ ansible_ssh_user }}"     # user for which you're setting folders. By default taken from group_vars

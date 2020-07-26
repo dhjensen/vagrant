@@ -22,13 +22,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     # ansible.verbose = "-vvvv"
 
-    # ansible.tags = ["untagged", "assert", "base", "user", "os"]
+    # ansible.tags = ["untagged, "assert", "wireshark" ,"facts", "user"]
 
-    # ansible.skip_tags = ["packages", "keys", "downloads", "repositories"]
+    # ansible.skip_tags = ["keys", "downloads", "repositories"]
 
-    # ansible.host_vars = {
-    #   "default" => {"ansible_ssh_user" => "vagrant"}
-    # }
+    ansible.host_vars = {
+      "mint193" => {"wireshark_setuid" => "true"}
+      "mint200" => {"wireshark_setuid" => "true"}
+    }
 
   end
 end

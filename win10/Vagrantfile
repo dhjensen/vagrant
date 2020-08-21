@@ -1,0 +1,22 @@
+Vagrant.configure("2") do |config|
+    config.vm.box = "gusztavvargadr/windows-10-enterprise"
+    config.vm.box_version = "2004.0.2008"
+
+    config.vm.provider "virtualbox" do |v|
+        v.gui = true
+        v.memory = 4096
+        v.cpus = 2
+
+        v.customize ["modifyvm", :id, "--vram", "128"]
+        v.customize ["modifyvm", :id, "--audio", "pulse"] # --audio none|null|dsound|oss|alsa|pulse|coreaudio
+        v.customize ["modifyvm", :id, "--audioin", "on"] # --audioin on
+        v.customize ["modifyvm", :id, "--audioout", "on"] # --audioout on
+        v.customize ["modifyvm", :id, "--clipboard-mode", "bidirectional"] # --clipboard-mode disabled|hosttoguest|guesttohost|bidirectional
+        #v.customize ["modifyvm", :id, "--clipboard-file-transfers", "enabled"] # --clipboard-file-transfers enabled|disabled:
+        v.customize ["modifyvm", :id, "--draganddrop", "bidirectional"] # --draganddrop disabled|hosttoguest|guesttohost|bidirectional
+        v.customize ["modifyvm", :id, "--usb", "on"] # --usb on|off
+        v.customize ["modifyvm", :id, "--usbehci", "off"] # --usbehci on|off
+        #v.customize ["modifyvm", :id, "--audioout", "on"] # --audioout on
+
+    end
+end

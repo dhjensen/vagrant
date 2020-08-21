@@ -10,6 +10,14 @@ Boxes:
 
 <https://app.vagrantup.com/epipho/boxes/mint-20.0>
 
+## win10
+
+My Windows 10 workstation
+
+Install a few usefull chocolatey apps using ansible?
+
+Box: <https://app.vagrantup.com/gusztavvargadr/boxes/windows-10-enterprise>
+
 ## control resolution
 
 <https://winaero.com/blog/set-exact-display-resolution-in-virtualbox-virtual-machine/>

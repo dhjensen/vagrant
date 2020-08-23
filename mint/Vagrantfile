@@ -27,7 +27,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # ansible.skip_tags = ["keys", "downloads", "repositories"]
 
     ansible.host_vars = {
-      "mint193" => {"wireshark_setuid" => "true"}
+      "mint193" => {"wireshark_setuid" => "true"},
       "mint200" => {"wireshark_setuid" => "true"}
     }
 

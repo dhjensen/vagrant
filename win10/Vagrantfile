@@ -9,14 +9,15 @@ Vagrant.configure("2") do |config|
 
         v.customize ["modifyvm", :id, "--vram", "128"]
         v.customize ["modifyvm", :id, "--audio", "pulse"] # --audio none|null|dsound|oss|alsa|pulse|coreaudio
+        v.customize ["modifyvm", :id, "--audiocontroller", "hda"] # --audiocontroller ac97|hda|sb16
         v.customize ["modifyvm", :id, "--audioin", "on"] # --audioin on
         v.customize ["modifyvm", :id, "--audioout", "on"] # --audioout on
         v.customize ["modifyvm", :id, "--clipboard-mode", "bidirectional"] # --clipboard-mode disabled|hosttoguest|guesttohost|bidirectional
         #v.customize ["modifyvm", :id, "--clipboard-file-transfers", "enabled"] # --clipboard-file-transfers enabled|disabled:
         v.customize ["modifyvm", :id, "--draganddrop", "bidirectional"] # --draganddrop disabled|hosttoguest|guesttohost|bidirectional
         v.customize ["modifyvm", :id, "--usb", "on"] # --usb on|off
-        v.customize ["modifyvm", :id, "--usbehci", "off"] # --usbehci on|off
-        #v.customize ["modifyvm", :id, "--audioout", "on"] # --audioout on
+        v.customize ["modifyvm", :id, "--usbxhci", "on"] # --usbxhci on|off: Enables and disables the VM's virtual USB 3.0 controller
+        v.customize ["storageattach", :id, "--storagectl", "IDE Controller", "--port", "1", "--device", "1", "--type", "dvddrive", "--medium", "emptydrive"] 
 
     end
 end

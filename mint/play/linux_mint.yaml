@@ -10,6 +10,7 @@
     install_flatpak: true
     install_vscode_extensions: true           # should we install extra vscode extensions
     install_mitogen: false                    # true by default
+    install_zsh: false                        # install and configure oh-my-zhs and power10k
     install_state: latest                     # if set to latest, every pass of playbook will also update packages
     config_ansible: true                      # do changes in change ansible.cfg
     config_dconf: true                        # do changes in dconf editor
@@ -19,6 +20,7 @@
     bin_path: /usr/local/bin                  # Where to put all downloaded execs.
     reboot_required: false                    # force reboot even if apt upgrade won't change anything
     unpack_folder: /tmp/linux_mint            # folder to which we're going to unpack and download files
+    wireshark_setuid: "{{ hostvars[inventory_hostname].wireshark_setuid | default('false') }}" # The default is false in deb package wireshark-common
   become: true
   gather_facts: no
   pre_tasks:
@@ -78,6 +80,10 @@
     tags:
     - assert
   tasks:
+# debug
+#  - name: configure_zsh
+#    include_tasks: ./tasks/configure_zsh.yml
+#  - meta: end_play
   # we need proper time to refresh repositories
   - name: make_sure_timesyncd_is_installed
     apt:
@@ -174,6 +180,7 @@
       state: present
       codename: "{{ codename }}"
       filename: "{{ item.filename }}"
+      mode: "0644"
     loop: "{{ repositories }}"
     retries: "{{ retries_count }}"
     delay: 3
@@ -189,6 +196,7 @@
       state: present
       codename: "{{ codename }}"
       filename: "{{ item.filename }}"
+      mode: "0644"
     loop: "{{ custom_repositories }}"
     retries: "{{ retries_count }}"
     delay: 3
@@ -207,6 +215,7 @@
       state: present
       codename: "{{ item.codename }}"
       filename: "{{ item.filename }}"
+      mode: "0644"
     loop: "{{ repositories_optional }}"
     retries: "{{ retries_count }}"
     delay: "{{ delay_time }}"
@@ -229,6 +238,32 @@
     tags:
     - packages
     - base
+  - name: debconf_wireshark_common
+    debconf:
+      name: wireshark-common
+      question: wireshark-common/install-setuid
+      value: "{{ wireshark_setuid }}"
+      vtype: boolean
+    register: r_debconf_wireshark_common
+    tags:
+    - packages
+    - base
+    - wireshark
+  - name: package_facts
+    package_facts:
+      manager: apt
+    when: r_debconf_wireshark_common is changed and r_debconf_wireshark_common is defined
+    tags:
+    - packages
+    - base
+    - facts
+  - name: reconfigure_wireshark_common
+    shell: dpkg-reconfigure --frontend noninteractive wireshark-common
+    when: "(ansible_facts.packages is defined and 'wireshark-common' in ansible_facts.packages) and (r_debconf_wireshark_common is changed and r_debconf_wireshark_common is defined)"
+    tags:
+    - packages
+    - base
+    - wireshark
 # make sure all dpkg are already configured
   - name: reconfigure_all_waiting_packages
     shell: dpkg --configure -a
@@ -330,10 +365,10 @@
     - packages
   - name: install_and_upgrade_pip_packages
     pip:
-      name: "{{ item }}"
+      name: "{{ item[1] }}"
       extra_args: --upgrade --upgrade-strategy=only-if-needed --ignore-installed
-      executable: "{{ pip_executable }}"
-    loop: "{{ pip }}"
+      executable: "{{ item[0] }}"
+    loop: "{{ pip_executable|product(pip_module)|list }}"
     retries: "{{ retries_count }}"
     delay: "{{ delay_time }}"
     register: r_pip
@@ -397,6 +432,14 @@
   - name: download_unarchive_flatten
     include_tasks: ./tasks/download_files.yml
     loop: "{{ unpack }}"
+    args:
+      apply:
+        tags:
+        - downloads
+        - apps
+        - tasks
+    tags:
+    - always
 # Download 3-rd party software to `bin_path` setting +x
   - name: download_regular_files
     get_url:
@@ -434,21 +477,30 @@
 # Start user-related modification block
   - name: user_modifications_block
     block:
+    - name: getent_group
+      getent:
+        database: group
+      tags:
+      - base
+      - user
     - name: create_or_check_users_groups
       user:
         name: "{{ active_user }}"
-        groups:
-        - root
-        - vboxusers
-        - docker
-        - adm
-        - sudo
-        - video
-        - cdrom
-        - plugdev
-        - dialout
+        groups: "{{ item }}"
         state: present
         append: true
+      loop:
+      - root
+      - vboxusers
+      - docker
+      - adm
+      - sudo
+      - video
+      - cdrom
+      - plugdev
+      - dialout
+      - wireshark
+      when: item in getent_group
       any_errors_fatal: false
       register: r_active_user_account
       until: r_active_user_account is success
@@ -457,7 +509,7 @@
       - user
     - name: fact_for_user_home_dir
       set_fact:
-        "active_user_homedir": "{{ r_active_user_account.home }}"
+        "active_user_homedir": "{{ r_active_user_account.results[0].home }}"
       tags:
       - base
       - user
@@ -482,6 +534,7 @@
         src: "{{ item.source }}"
         owner: "{{ active_user }}"
         group: "{{ active_user }}"
+        mode: 0644
         force: false
       loop: "{{ startup }}"
       any_errors_fatal: false
@@ -660,6 +713,7 @@
       file:
         path: /etc/systemd/system/fstrim.timer.d
         state: directory
+        mode: 0644
     - name: create_fstrim_override_for_systemd
       copy:
         dest: /etc/systemd/system/fstrim.timer.d/override.conf

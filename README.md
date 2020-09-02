@@ -107,12 +107,13 @@ Most variables are stored in `mint19|20.yaml` file. If you need extra settings, 
 |bin_path|/usr/local/bin|Where to put all downloaded execs|
 |reboot_required|false|force reboot even if apt upgrade won't change anything|
 |unpack_folder|/tmp/linux_mint|Which folder to use when downloading and unarchiving|
+|wireshark_setuid|false|Should wireshark be configured for non-root package capture|
 
 ## Custom variables, custom variable files
 
 If you don't want to track changes or change main variable file content with every pull, create your own custom variable files. By default playbook will look for files: `mint[ansible_distribution_major_version]*.yaml`.
 This means - if your distro is Linux Mint 19, place a file in a playbook folder witha name: mint19_custom.yaml
-If your distro is Linux Mint 19, place a file in a playbook folder with a name: mint20_custom.yaml.
+If your distro is Linux Mint 20, place a file in a playbook folder with a name: mint20_custom.yaml.
 These filters are added to .gitignore to not override your changes.
 Be careful not to add multiple matching files with corresponding names
 
@@ -163,6 +164,7 @@ custom_packages:
 * `virtualbox` - Virtualization Software
 * `vscode` - Microsoft Visual Studio Code
 * `y-ppa-manager` - Manage your PPA as human being
+* `wireshark` - Network protocol analyzer
 
 ### Repositories: Optional
 
@@ -216,6 +218,7 @@ custom_packages:
 | k3s |Lightweight Kubernetes. 5 less than k8s.|[https://k3s.io/](https://k3s.io/)|
 | Keepass | Password Manager| [https://keepass.info/](https://keepass.info/)|
 | Kubernetes| Production-Grade Container Orchestration|[https://kubernetes.io/](https://kubernetes.io/)|
+| Kubeval| Kubernetes config validator|[https://github.com/instrumenta/kubeval](https://github.com/instrumenta/kubeval)|
 | Lens| Kubernetes IDE| [https://k8slens.dev/](https://k8slens.dev/)|
 | Minikube | Run Kubernetes locally |[https://github.com/kubernetes/minikube](https://github.com/kubernetes/minikube)|
 | Packer | Image creator |[https://www.packer.io/](https://www.packer.io/)|
@@ -236,6 +239,7 @@ custom_packages:
 | Vault | Secrets Manager |[https://www.vaultproject.io/](https://www.vaultproject.io/)
 | VirtualBox|Virtualization|[https://www.virtualbox.org/](https://www.virtualbox.org/)|
 | Visual Studio Code|Code editor|[https://code.visualstudio.com/](https://code.visualstudio.com/)|
+| Wireshark | Network protocol analyzer | [https://www.wireshark.org/](https://www.wireshark.org/)|
 | WPS Office for Linux | Productivity Tools | [https://www.wps.com/wps-office-for-linux/](https://www.wps.com/wps-office-for-linux/)
 | XCA | Certificate Manager|[https://hohnstaedt.de/xca/](https://hohnstaedt.de/xca/)|
 

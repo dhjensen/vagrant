@@ -31,10 +31,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     #   "mint200" => {"wireshark_setuid" => "true"}
     # }
 
-    # ansible.groups = {
-    #   "mint" => ["mint193", "mint200"],
-    #   "mint:vars" => {"wireshark_setuid" => "false"}
-    # }
+    ansible.groups = {
+      "mint" => ["mint193", "mint200"],
+      "mint:vars" => {"wireshark_setuid" => "true"}
+    }
 
   end
 end

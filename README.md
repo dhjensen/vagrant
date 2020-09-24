@@ -240,7 +240,6 @@ custom_packages:
 | VirtualBox|Virtualization|[https://www.virtualbox.org/](https://www.virtualbox.org/)|
 | Visual Studio Code|Code editor|[https://code.visualstudio.com/](https://code.visualstudio.com/)|
 | Wireshark | Network protocol analyzer | [https://www.wireshark.org/](https://www.wireshark.org/)|
-| WPS Office for Linux | Productivity Tools | [https://www.wps.com/wps-office-for-linux/](https://www.wps.com/wps-office-for-linux/)
 | XCA | Certificate Manager|[https://hohnstaedt.de/xca/](https://hohnstaedt.de/xca/)|
 
 ### Packages: Optional (not complete list)
@@ -268,6 +267,8 @@ custom_packages:
 | GIMP | GNU Image Manipulation Program | [https://www.gimp.org/](https://www.gimp.org/)|
 | Telegram | Free end to end encrypted chat | [https://telegram.org](https://telegram.org)
 | WoeUSB | USB Image writer | [https://github.com/slacka/WoeUSB](https://github.com/slacka/WoeUSB)|
+| pavucontrol | PulseAudio Volume Control | [https://freedesktop.org/software/pulseaudio/pavucontrol/](https://freedesktop.org/software/pulseaudio/pavucontrol/) |
+| audacity | Audacity is an easy-to-use, multi-track audio editor and recorder | [https://www.audacityteam.org/](https://www.audacityteam.org/) |
 
 ### Packages: Flatpak
 

@@ -2,6 +2,9 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
+  config.vm.synced_folder "~/Projects/ansible/linux_mint", "/vagrant", type: "rsync",
+    rsync__exclude: ".git/"
+
   config.vm.define "mint193", autostart: false do |mint193|
     mint193.vm.box = "epipho/mint-19.3"
     mint193.vm.box_version = "1.0.0"
@@ -14,9 +17,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provision "ansible_local" do |ansible|
   #config.vm.provision "ansible" do |ansible|
-    ansible.playbook = "play/linux_mint.yaml"
+    ansible.playbook = "main.yml"
     # For focal the ppa doesnt have an ansible build yet so it fails.
-    ansible.install_mode = :pip
+    ansible.install_mode = "pip3"
 
     # ansible.start_at_task = "remove_obsolete_extensions"
 
@@ -33,7 +36,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     ansible.groups = {
       "mint" => ["mint193", "mint200"],
-      "mint:vars" => {"wireshark_setuid" => "true"}
+      "mint:vars" => {
+        "wireshark_setuid" => "true",
+        "ansible_ssh_user" => "dhjensen"
+      }
     }
 
   end

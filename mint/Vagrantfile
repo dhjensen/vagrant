@@ -10,9 +10,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     mint193.vm.box_version = "1.0.0"
   end
 
-  config.vm.define "mint200" do |mint200|
-    mint200.vm.box = "epipho/mint-20.0"
-    mint200.vm.box_version = "1.0.0"
+  config.vm.define "mint201" do |mint201|
+    mint201.vm.box = "aaronvonawesome/linux-mint-20-cinnamon"
+    mint201.vm.box_version = "2.0.2"
+
+    mint201.vm.provider "virtualbox" do |v|
+      v.memory = 4096
+      v.cpus = 4
+      v.gui = true
+    end
   end
 
   config.vm.provision "ansible_local" do |ansible|
@@ -35,10 +41,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # }
 
     ansible.groups = {
-      "mint" => ["mint193", "mint200"],
+      "mint" => ["mint193", "mint201"],
       "mint:vars" => {
         "wireshark_setuid" => "true",
-        "ansible_ssh_user" => "dhjensen"
+        "ansible_ssh_user" => "vagrant"
       }
     }
 

@@ -31,9 +31,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     # ansible.verbose = "-vvvv"
 
-    # ansible.tags = ["untagged, "assert", "wireshark" ,"facts", "user"]
+    # ansible.tags = ["untagged", "assert", "fact", "user", "python"]
 
-    # ansible.skip_tags = ["keys", "downloads", "repositories"]
+    # ansible.skip_tags = ["keys", "downloads", "repositories", "packages" ]
 
     # ansible.host_vars = {
     #   "mint193" => {"wireshark_setuid" => "true"},

@@ -2,8 +2,10 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
-  config.vm.synced_folder "~/Projects/ansible/linux_mint", "/vagrant", type: "rsync",
-    rsync__exclude: ".git/"
+  config.vm.synced_folder "~/Projects/ansible/linux_mint", "/vagrant", type: "rsync",  rsync__exclude: ".git/"
+
+  # Allow Vagrant to use ssh agent keys
+  config.ssh.keys_only = false
 
   config.vm.define "mint193", autostart: false do |mint193|
     mint193.vm.box = "epipho/mint-19.3"

@@ -2,15 +2,15 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
-  config.vm.synced_folder "~/Projects/ansible/linux_mint", "/vagrant", type: "rsync",  rsync__exclude: ".git/"
+  config.vm.synced_folder "~/Source/linux_mint", "/vagrant", type: "rsync",  rsync__exclude: ".git/"
 
   # Allow Vagrant to use ssh agent keys
-  config.ssh.keys_only = false
+  # config.ssh.keys_only = false
 
-  config.vm.define "mint193", autostart: false do |mint193|
-    mint193.vm.box = "epipho/mint-19.3"
-    mint193.vm.box_version = "1.0.0"
-  end
+  # config.vm.define "mint193", autostart: false do |mint193|
+  #   mint193.vm.box = "epipho/mint-19.3"
+  #   mint193.vm.box_version = "1.0.0"
+  # end
 
   config.vm.define "mint201" do |mint201|
     mint201.vm.box = "aaronvonawesome/linux-mint-20-cinnamon"
@@ -20,6 +20,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       v.memory = 4096
       v.cpus = 4
       v.gui = true
+
+      v.customize ["modifyvm", :id, "--pae", "on"]
+      v.customize ["modifyvm", :id, "--nestedpaging", "on"]
+      v.customize ["storagectl", :id, "--name", "SATA", "--hostiocache", "on"]
     end
   end
 
@@ -27,7 +31,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #config.vm.provision "ansible" do |ansible|
     ansible.playbook = "main.yml"
     # For focal the ppa doesnt have an ansible build yet so it fails.
-    ansible.install_mode = "pip3"
+    ansible.install_mode = "pip"
+    ansible.pip_install_cmd = "sudo apt-get install -y python3-pip python-is-python3 haveged && sudo ln -s -f /usr/bin/pip3 /usr/bin/pip"
+
+    ansible.galaxy_role_file = "requirements.yml"
 
     # ansible.start_at_task = "remove_obsolete_extensions"
 
